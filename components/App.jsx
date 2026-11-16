@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import {
   Compass, MapPin, Calendar, BookOpen, Image as ImageIcon, PlusCircle,
   Search, ChevronRight, X, ExternalLink, Info, ShieldAlert, Menu, Eye,
-  Download, Sparkles, Landmark, CheckCircle, ArrowRight, Printer, Layers,
+  Download, Landmark, CheckCircle, ArrowRight, Printer, Layers,
 } from 'lucide-react';
 
 const NAV = [
@@ -277,7 +277,7 @@ export default function App() {
 
               <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#8C6D4F]/30 border border-[#D4AF37]/40 text-[#D4AF37] text-xs uppercase tracking-widest font-semibold mb-6 shadow-sm">
-                  <Sparkles className="w-3.5 h-3.5" /> Secretaria Municipal de Cultura • SEMCULT
+                  Secretaria Municipal de Cultura • SEMCULT
                 </div>
                 <h1 className="font-serif text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-6 leading-tight">
                   Pedro II: uma cidade, <br />
