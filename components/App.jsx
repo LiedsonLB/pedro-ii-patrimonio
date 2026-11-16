@@ -6,6 +6,7 @@ import {
   Search, ChevronRight, X, ExternalLink, Info, ShieldAlert, Menu, Eye,
   Download, Landmark, CheckCircle, ArrowRight, Printer, Layers,
 } from 'lucide-react';
+import Image from 'next/image';
 
 const NAV = [
   { id: 'home', label: 'Início', icon: Compass },
@@ -188,8 +189,8 @@ export default function App() {
       <header className="sticky top-0 z-40 bg-[#F5EFEB]/95 backdrop-blur-md border-b border-[#E3D9CE] shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           <button onClick={() => setCurrentView('home')} className="flex items-center gap-3 text-left group focus:outline-none">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#4A3B32] to-[#2C221E] flex items-center justify-center text-[#D4AF37] shadow-md group-hover:scale-105 transition-transform">
-              <Landmark className="w-6 h-6" />
+            <div className="w-12 h-12 rounded-xl flex items-center justify-center text-[#D4AF37] group-hover:scale-105 transition-transform">
+              <Image src="/image/pedroII_logo.png" alt="Logo Pedro II" width={60} height={40} className="w-10 h-10" />
             </div>
             <div>
               <span className="block font-serif font-bold text-lg text-[#2C221E] tracking-tight group-hover:text-[#8C6D4F] transition-colors">
@@ -208,9 +209,8 @@ export default function App() {
                 <button
                   key={id}
                   onClick={() => setCurrentView(id)}
-                  className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium transition-all ${
-                    isActive ? 'bg-[#4A3B32] text-[#FDFBF7] shadow-sm' : 'text-[#59473D] hover:bg-[#EAE0D5] hover:text-[#2C221E]'
-                  }`}
+                  className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium transition-all ${isActive ? 'bg-[#4A3B32] text-[#FDFBF7] shadow-sm' : 'text-[#59473D] hover:bg-[#EAE0D5] hover:text-[#2C221E]'
+                    }`}
                 >
                   <Icon className={`w-4 h-4 ${isActive ? 'text-[#D4AF37]' : 'text-[#8C6D4F]'}`} />
                   {label}
@@ -241,9 +241,8 @@ export default function App() {
                     setCurrentView(id);
                     setMobileMenuOpen(false);
                   }}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium transition-colors ${
-                    isActive ? 'bg-[#4A3B32] text-[#FDFBF7]' : 'text-[#59473D] hover:bg-[#EAE0D5]'
-                  }`}
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium transition-colors ${isActive ? 'bg-[#4A3B32] text-[#FDFBF7]' : 'text-[#59473D] hover:bg-[#EAE0D5]'
+                    }`}
                 >
                   <Icon className={`w-5 h-5 ${isActive ? 'text-[#D4AF37]' : 'text-[#8C6D4F]'}`} />
                   {label}
@@ -265,9 +264,9 @@ export default function App() {
         {currentView === 'home' && (
           <div className="animate-fadeIn">
             <section className="relative bg-[#2C221E] text-[#FDFBF7] py-24 lg:py-36 overflow-hidden">
-              <div className="absolute inset-0 z-0 opacity-30 mix-blend-overlay">
+              <div className="absolute inset-0 z-0 opacity-95 mix-blend-overlay">
                 <img
-                  src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=2000&q=80"
+                  src="https://www.gp1.com.br/media/image_bank/2023/5/ministerio-do-turismo-destaca-pedro-ii-como-cidade-para-apronone.jpeg.1200x0_q95_crop.webp"
                   alt="Paisagem de Pedro II"
                   className="w-full h-full object-cover object-center scale-105"
                 />
@@ -326,7 +325,7 @@ export default function App() {
                 <div className="relative">
                   <div className="absolute -inset-4 bg-[#D4AF37]/10 rounded-3xl transform rotate-2"></div>
                   <img
-                    src="https://images.unsplash.com/photo-1548625149-fc4a29cf7092?auto=format&fit=crop&w=1000&q=80"
+                    src="https://cidadeverde.com/assets/uploads/posts/1_1024x683.jpg"
                     alt="Igreja Matriz de Pedro II"
                     className="relative rounded-2xl shadow-xl w-full h-[400px] object-cover"
                   />
@@ -385,11 +384,10 @@ export default function App() {
                   <button
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}
-                    className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all ${
-                      selectedCategory === cat
+                    className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all ${selectedCategory === cat
                         ? 'bg-[#4A3B32] text-[#FDFBF7] shadow-sm'
                         : 'bg-[#FDFBF7] text-[#59473D] border border-[#E3D9CE] hover:bg-[#EAE0D5]'
-                    }`}
+                      }`}
                   >
                     {cat}
                   </button>
@@ -448,9 +446,8 @@ export default function App() {
                     <button
                       key={m.id}
                       onClick={() => setMapMode(m.id)}
-                      className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${
-                        mapMode === m.id ? 'bg-[#D4AF37] text-[#2C221E] shadow' : 'text-[#FDFBF7] hover:bg-white/10'
-                      }`}
+                      className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${mapMode === m.id ? 'bg-[#D4AF37] text-[#2C221E] shadow' : 'text-[#FDFBF7] hover:bg-white/10'
+                        }`}
                     >
                       {m.label}
                     </button>
@@ -477,11 +474,10 @@ export default function App() {
                           <div
                             key={item.id}
                             onClick={() => setActiveMapLocation(item)}
-                            className={`p-3 rounded-xl border transition-all cursor-pointer flex items-center gap-3 ${
-                              active
+                            className={`p-3 rounded-xl border transition-all cursor-pointer flex items-center gap-3 ${active
                                 ? 'bg-[#4A3B32] border-[#8C6D4F] text-[#FDFBF7] shadow-md'
                                 : 'bg-[#FDFBF7] border-[#E3D9CE] hover:border-[#8C6D4F] text-[#2C221E] hover:shadow-sm'
-                            }`}
+                              }`}
                           >
                             <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 bg-white">
                               <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
@@ -842,8 +838,8 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-xl bg-[#8C6D4F] flex items-center justify-center text-[#D4AF37]">
-                <Landmark className="w-5 h-5" />
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center text-[#D4AF37] shadow-md group-hover:scale-105 transition-transform">
+                <Image src="/image/pedroII_logo.png" alt="Logo Pedro II" width={60} height={40} className="w-10 h-10" />
               </div>
               <span className="font-serif font-bold text-lg text-white">Pedro II - PI</span>
             </div>
