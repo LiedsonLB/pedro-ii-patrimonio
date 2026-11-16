@@ -27,7 +27,7 @@ const base = [
     sources:
       'Diagnóstico Situacional da Cultura - SEMCULT de Pedro II - PI. [Google Maps](https://www.google.com/maps/place/Par%C3%B3quia+Nossa+Senhora+da+Concei%C3%A7%C3%A3o/@-4.4251206,-41.4583137,17z)',
     keywords: ['Igreja', 'Matriz', 'Religião', 'Século XIX', 'Tertuliano Brandão'],
-    image: '/image/IMG_5440.jpg.jpeg',
+    image: '/image/IMG_5440.webp',
   },
   {
     id: 2,
@@ -52,7 +52,7 @@ const base = [
       'Localizado estrategicamente frente ao principal núcleo religioso e civil da vila.',
     sources: 'Secretaria Municipal de Cultura (SEMCULT) de Pedro II.',
     keywords: ['Alferes', 'Domingos da Silva Mourão', 'Casarão', 'Arquitetura Colonial'],
-    image: '/image/IMG_5442.jpg.jpeg',
+    image: '/image/IMG_5442.webp',
   },
   {
     id: 3,
@@ -76,7 +76,7 @@ const base = [
     sources:
       'Diagnóstico Situacional da Cultura (SEMCULT). [Google Maps](https://www.google.com/maps/place/Solar+da+Estrela+Marrom/@-4.4262103,-41.458438,17z)',
     keywords: ['Casarão', 'Coronel Domingos Mourão Filho', 'Solar', 'Estrela Marrom'],
-    image: '/image/IMG_5443.jpg.jpeg',
+    image: '/image/IMG_5443.webp',
   },
   {
     id: 4,
@@ -101,7 +101,7 @@ const base = [
     sources:
       'Prefeitura Municipal de Pedro II e SEMCULT. [Google Maps](https://www.google.com/maps/place/Secretaria+de+Agricultura+Abastecimento+e+Irriga%C3%A7%C3%A3o/@-4.4253525,-41.4566598,17z)',
     keywords: ['Associação Rural', 'Secretaria de Agricultura', 'Agostinho Pinheiro'],
-    image: '/image/IMG_5439.jpg.jpeg',
+    image: '/image/IMG_5439.webp',
   },
   {
     id: 5,
@@ -122,7 +122,7 @@ const base = [
     curiosities: 'Mantém exposições permanentes sobre o garimpo da opala.',
     sources: 'Secretaria Municipal de Cultura (SEMCULT).',
     keywords: ['Pinacoteca', 'Arte', 'Pintura', 'Cultura'],
-    image: '/image/IMG_5435.jpg.jpeg',
+    image: '/image/IMG_5435.webp',
   },
   {
     id: 6,
@@ -142,7 +142,7 @@ const base = [
     curiosities: 'Recebeu autoridades estaduais nos Festivais de Inverno.',
     sources: 'Diagnóstico Situacional da Cultura (SEMCULT).',
     keywords: ['Clube', '11 de Agosto', 'Social', 'Baile'],
-    image: '/image/IMG_5429.jpg.jpeg',
+    image: '/image/IMG_5429.webp',
   },
   {
     id: 7,
@@ -162,7 +162,7 @@ const base = [
     curiosities: 'A Renda de Bilro é Patrimônio Cultural Imaterial do Piauí.',
     sources: 'SEMCULT e Associação de Artesãos.',
     keywords: ['Mercado', 'Artesanato', 'Renda de Bilro', 'Opala'],
-    image: '/image/IMG_5428.jpg.jpeg',
+    image: '/image/IMG_5428.webp',
   },
   {
     id: 8,
@@ -182,7 +182,7 @@ const base = [
     curiosities: 'Rocha perfeitamente polida pela força das águas.',
     sources: 'Secretaria de Turismo.',
     keywords: ['Cachoeira', 'Salto Liso', 'Natureza'],
-    image: '/image/IMG_5427.jpg.jpeg',
+    image: '/image/IMG_5427.webp',
   },
   {
     id: 9,
@@ -202,7 +202,7 @@ const base = [
     curiosities: 'O eco nos paredões deu origem à lenda do Gritador.',
     sources: 'SEMCULT.',
     keywords: ['Mirante', 'Gritador', 'Serra'],
-    image: '/image/IMG_5421.jpg.jpeg',
+    image: '/image/IMG_5421.webp',
   },
 ];
 
