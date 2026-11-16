@@ -13,7 +13,6 @@ const NAV = [
   { id: 'map', label: 'Mapa Interativo', icon: MapPin },
   { id: 'history', label: 'História & Linha do Tempo', icon: Calendar },
   { id: 'gallery', label: 'Galeria Fotográfica', icon: ImageIcon },
-  { id: 'admin', label: 'Área Administrativa', icon: PlusCircle },
 ];
 
 const DEFAULT_IMAGE =
