@@ -1,12 +1,15 @@
 'use client';
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import {
   Compass, MapPin, Calendar, BookOpen, Image as ImageIcon, PlusCircle,
   Search, ChevronRight, X, ExternalLink, Info, ShieldAlert, Menu, Eye,
   Download, Landmark, CheckCircle, ArrowRight, Printer, Layers,
+  Camera, Route, FileText, Users,
 } from 'lucide-react';
 import Image from 'next/image';
+import { patrimoniosSeed, categorias as categoriasSeed } from '../app/api/_data/patrimonios';
+import { timelineEvents as timelineSeed } from '../app/api/_data/timeline';
 
 const NAV = [
   { id: 'home', label: 'Início', icon: Compass },
@@ -14,10 +17,10 @@ const NAV = [
   { id: 'map', label: 'Mapa Interativo', icon: MapPin },
   { id: 'history', label: 'História & Linha do Tempo', icon: Calendar },
   { id: 'gallery', label: 'Galeria Fotográfica', icon: ImageIcon },
+  { id: 'about', label: 'Sobre o projeto', icon: Info },
 ];
 
-const DEFAULT_IMAGE =
-  'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=1200&q=80';
+const DEFAULT_IMAGE = '/image/placeholder-patrimonio.svg';
 
 const emptyForm = {
   name: '',
@@ -42,6 +45,7 @@ const inputCls =
 const labelCls = 'block text-xs uppercase font-bold tracking-wider text-[#59473D] mb-2';
 
 function PatrimonyCard({ item, onOpen, showAddress, cta }) {
+  const pendingImage = item.image.includes('placeholder-patrimonio');
   return (
     <div
       className="bg-[#FDFBF7] rounded-2xl overflow-hidden border border-[#E3D9CE] shadow-sm hover:shadow-md transition-all flex flex-col group cursor-pointer"
@@ -52,7 +56,13 @@ function PatrimonyCard({ item, onOpen, showAddress, cta }) {
           src={item.image}
           alt={item.name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          style={{ objectPosition: item.imagePosition || 'center' }}
         />
+        {pendingImage && (
+          <span className="absolute bottom-4 right-4 bg-[#FDFBF7]/90 text-[#59473D] text-[11px] font-semibold px-3 py-1.5 rounded-full">
+            Fotografia externa pendente
+          </span>
+        )}
         <span className="absolute top-4 left-4 bg-[#2C221E]/80 backdrop-blur-md text-[#FDFBF7] text-xs font-medium px-3 py-1 rounded-full">
           {item.category}
         </span>
@@ -88,11 +98,11 @@ function SectionTitle({ kicker, title, children, className = 'mb-10' }) {
 
 export default function App() {
   const [currentView, setCurrentView] = useState('home');
-  const [patrimoniesList, setPatrimoniesList] = useState([]);
-  const [categories, setCategories] = useState(['Todos']);
-  const [timelineEvents, setTimelineEvents] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [patrimoniesList, setPatrimoniesList] = useState(patrimoniosSeed);
+  const [categories, setCategories] = useState(['Todos', ...categoriasSeed]);
+  const [timelineEvents] = useState(timelineSeed);
+  const [loading] = useState(false);
+  const [error] = useState(null);
 
   const [selectedPatrimony, setSelectedPatrimony] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -100,33 +110,12 @@ export default function App() {
   const [lightboxImage, setLightboxImage] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mapMode, setMapMode] = useState('osm'); // 'osm' | 'google'
-  const [activeMapLocation, setActiveMapLocation] = useState(null);
+  const [showMap, setShowMap] = useState(false);
+  const [activeMapLocation, setActiveMapLocation] = useState(patrimoniosSeed[0] || null);
 
   const [formData, setFormData] = useState(emptyForm);
   const [formSuccess, setFormSuccess] = useState(false);
   const [formError, setFormError] = useState(null);
-
-  const loadPatrimonies = useCallback(async () => {
-    const res = await fetch('/api/patrimonios', { cache: 'no-store' });
-    if (!res.ok) throw new Error('Falha ao carregar patrimônios');
-    const json = await res.json();
-    setPatrimoniesList(json.data);
-    setCategories(['Todos', ...json.categorias]);
-    setActiveMapLocation((prev) => prev || json.data[0] || null);
-  }, []);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const [, tl] = await Promise.all([loadPatrimonies(), fetch('/api/timeline')]);
-        setTimelineEvents(await tl.json());
-      } catch (e) {
-        setError(e.message);
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, [loadPatrimonies]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -139,23 +128,51 @@ export default function App() {
       const okSearch =
         item.name.toLowerCase().includes(q) ||
         item.shortDesc.toLowerCase().includes(q) ||
+        (item.aliases || []).some((alias) => alias.toLowerCase().includes(q)) ||
         item.keywords.some((k) => k.toLowerCase().includes(q));
       return okCat && okSearch;
     });
   }, [patrimoniesList, selectedCategory, searchQuery]);
+
+  const galleryItems = useMemo(
+    () =>
+      patrimoniesList.flatMap((item) =>
+        (item.gallery || []).map((photo, index) => ({
+          ...photo,
+          id: `${item.id}-${index}`,
+          patrimonyName: item.name,
+          category: item.category,
+          address: item.address,
+        })),
+      ),
+    [patrimoniesList],
+  );
 
   const handleAdminSubmit = async (e) => {
     e.preventDefault();
     setFormError(null);
     if (!formData.name || !formData.shortDesc) return;
     try {
-      const res = await fetch('/api/patrimonios', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-      if (!res.ok) throw new Error((await res.json()).error || 'Erro ao salvar');
-      await loadPatrimonies();
+      const newItem = {
+        ...formData,
+        id: Math.max(0, ...patrimoniesList.map((item) => Number(item.id) || 0)) + 1,
+        keywords: formData.keywords
+          .split(',')
+          .map((keyword) => keyword.trim())
+          .filter(Boolean),
+        gallery: [
+          {
+            src: formData.image,
+            alt: formData.name,
+            caption: formData.name,
+            credit: 'Crédito em identificação.',
+          },
+        ],
+      };
+      setPatrimoniesList((items) => [...items, newItem]);
+      if (!categories.includes(newItem.category)) {
+        setCategories((items) => [...items, newItem.category]);
+      }
       setFormSuccess(true);
       setFormData(emptyForm);
       setTimeout(() => setFormSuccess(false), 5000);
@@ -202,7 +219,7 @@ export default function App() {
             </div>
           </button>
 
-          <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
+          <nav className="hidden xl:flex items-center gap-1">
             {NAV.map(({ id, label, icon: Icon }) => {
               const isActive = currentView === id;
               return (
@@ -219,7 +236,7 @@ export default function App() {
             })}
           </nav>
 
-          <div className="lg:hidden">
+          <div className="xl:hidden">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2.5 rounded-xl bg-[#EAE0D5] text-[#2C221E] hover:bg-[#DED2C4] transition-colors"
@@ -231,7 +248,7 @@ export default function App() {
         </div>
 
         {mobileMenuOpen && (
-          <div className="lg:hidden bg-[#F5EFEB] border-b border-[#E3D9CE] px-4 pt-2 pb-6 space-y-2 animate-fadeIn">
+          <div className="xl:hidden bg-[#F5EFEB] border-b border-[#E3D9CE] px-4 pt-2 pb-6 space-y-2 animate-fadeIn">
             {NAV.map(({ id, label, icon: Icon }) => {
               const isActive = currentView === id;
               return (
@@ -266,8 +283,8 @@ export default function App() {
             <section className="relative bg-[#2C221E] text-[#FDFBF7] py-24 lg:py-36 overflow-hidden">
               <div className="absolute inset-0 z-0 opacity-95 mix-blend-overlay">
                 <img
-                  src="https://www.gp1.com.br/media/image_bank/2023/5/ministerio-do-turismo-destaca-pedro-ii-como-cidade-para-apronone.jpeg.1200x0_q95_crop.webp"
-                  alt="Paisagem de Pedro II"
+                  src="/image/IMG_5443.webp"
+                  alt="Conjunto de edificações históricas de Pedro II"
                   className="w-full h-full object-cover object-center scale-105"
                 />
               </div>
@@ -282,7 +299,7 @@ export default function App() {
                   <span className="text-[#D4AF37] italic">muitas histórias</span>
                 </h1>
                 <p className="text-lg sm:text-xl text-[#EAE0D5] max-w-2xl mx-auto mb-10 font-light leading-relaxed">
-                  Acervo digital oficial para salvaguarda, pesquisa e divulgação dos patrimônios históricos, construções seculares, cultura e belezas naturais do município.
+                  Acervo digital para pesquisa, preservação e divulgação dos patrimônios históricos, construções seculares, cultura e belezas naturais do município.
                 </p>
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                   <button
@@ -309,7 +326,7 @@ export default function App() {
                     Raízes portuguesas, tradição da opala e riqueza arquitetônica
                   </h2>
                   <p className="text-[#59473D] text-base sm:text-lg leading-relaxed mb-6">
-                    Fundado originalmente como povoado Pequizeiro em 1822 por João Alves Pereira e irmãos, o município foi elevado à vila e batizado como Pedro II em 11 de agosto de 1854. A cidade destaca-se pela herança dos casarões coloniais, pelas únicas jazidas de opala preciosa do Brasil e pelo ecoturismo na Serra dos Matões.
+                    Formado no final do século XVIII, o povoado Pequizeiro foi estabelecido em 1822 por João Alves Pereira e seus irmãos, de origem portuguesa. Em 1851 passou a se chamar Matões e, em 11 de agosto de 1854, foi elevado à categoria de vila com o nome de Pedro II. A cidade reúne um expressivo patrimônio arquitetônico, tradições culturais, produção artesanal, mineração de opala e paisagens da Serra dos Matões.
                   </p>
                   <div className="grid grid-cols-2 gap-6 pt-4 border-t border-[#E3D9CE]">
                     <div>
@@ -322,14 +339,17 @@ export default function App() {
                     </div>
                   </div>
                 </div>
-                <div className="relative">
+                <figure className="relative">
                   <div className="absolute -inset-4 bg-[#D4AF37]/10 rounded-3xl transform rotate-2"></div>
                   <img
-                    src="https://cidadeverde.com/assets/uploads/posts/1_1024x683.jpg"
-                    alt="Igreja Matriz de Pedro II"
+                    src="/image/IMG_5429.webp"
+                    alt="Casarão do Capitão Sotero Nogueira Lima, conhecido como Clube 11 de Agosto"
                     className="relative rounded-2xl shadow-xl w-full h-[400px] object-cover"
                   />
-                </div>
+                  <figcaption className="relative mt-3 text-xs text-[#6B574B] text-center">
+                    Casarão do Capitão Sotero Nogueira Lima, conhecido como Clube 11 de Agosto.
+                  </figcaption>
+                </figure>
               </div>
             </section>
 
@@ -364,8 +384,8 @@ export default function App() {
         {/* CATÁLOGO */}
         {currentView === 'catalog' && (
           <div className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 animate-fadeIn">
-            <SectionTitle kicker="Inventário Oficial" title="Catálogo de Patrimônios">
-              Consulte fichas técnicas, histórico, endereços e coordenadas dos bens tombados e catalogados em Pedro II - PI.
+            <SectionTitle kicker="Inventário Digital" title="Catálogo de Patrimônios">
+              Consulte fichas técnicas, histórico, endereços e coordenadas dos bens selecionados e catalogados pelo projeto em Pedro II - PI.
             </SectionTitle>
 
             <div className="bg-[#F5EFEB] p-6 rounded-2xl border border-[#E3D9CE] mb-10 shadow-sm space-y-6">
@@ -425,7 +445,7 @@ export default function App() {
         {/* MAPA */}
         {currentView === 'map' && (
           <div className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 animate-fadeIn">
-            <SectionTitle kicker="Geolocalização e Mapeamento Oficial" title="Mapa Interativo de Pedro II">
+            <SectionTitle kicker="Geolocalização e Mapeamento" title="Mapa Interativo de Pedro II">
               Visualize os pontos cadastrados com suas coordenadas exatas e acesse diretamente os links do Google Maps.
             </SectionTitle>
 
@@ -495,7 +515,7 @@ export default function App() {
                 </div>
 
                 <div className="w-full lg:w-2/3 h-[500px] lg:h-auto bg-[#2C221E] rounded-2xl overflow-hidden border border-[#8C6D4F] relative shadow-inner">
-                  {mapSrc && (
+                  {showMap && mapSrc ? (
                     <iframe
                       key={mapSrc}
                       title="Mapa de Pedro II"
@@ -503,8 +523,24 @@ export default function App() {
                       className="w-full h-full border-0"
                       loading="lazy"
                     />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center p-6 bg-gradient-to-br from-[#2C221E] to-[#4A3B32]">
+                      <div className="max-w-md text-center text-[#FDFBF7]">
+                        <MapPin className="w-12 h-12 text-[#D4AF37] mx-auto mb-4" />
+                        <h3 className="font-serif text-2xl font-bold mb-2">Mapa carregado sob demanda</h3>
+                        <p className="text-sm text-[#EAE0D5] mb-6">
+                          O mapa só será carregado quando você solicitar, reduzindo o consumo de dados e deixando a navegação mais leve.
+                        </p>
+                        <button
+                          onClick={() => setShowMap(true)}
+                          className="px-6 py-3 rounded-xl bg-[#D4AF37] hover:bg-[#E2C45A] text-[#2C221E] text-sm font-bold transition-colors shadow-lg"
+                        >
+                          Exibir mapa
+                        </button>
+                      </div>
+                    </div>
                   )}
-                  {activeMapLocation && (
+                  {showMap && activeMapLocation && (
                     <div className="absolute bottom-6 left-6 right-6 lg:right-auto lg:w-[340px] pointer-events-none">
                       <div className="bg-[#FDFBF7]/95 backdrop-blur-md shadow-2xl border border-[#E3D9CE] p-4 rounded-2xl pointer-events-auto">
                         <span className="font-bold text-[#2C221E] text-base font-serif leading-tight mb-2 block">
@@ -545,7 +581,7 @@ export default function App() {
         {currentView === 'history' && (
           <div className="py-12 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 animate-fadeIn">
             <SectionTitle kicker="Diagnóstico Situacional da Cultura" title="Formação Histórica e Institucionalidade" className="mb-12">
-              Cronologia oficial da fundação, marcos legislativos, comarcas e evolução da gestão cultural em Pedro II - Piauí.
+              Cronologia baseada no diagnóstico municipal de 2018, reunindo a formação do município, marcos legislativos, a comarca e a evolução da gestão cultural em Pedro II - Piauí.
             </SectionTitle>
 
             <div className="relative border-l-2 border-[#8C6D4F]/30 ml-4 md:ml-32 space-y-12 py-4">
@@ -571,10 +607,10 @@ export default function App() {
                 <h3 className="font-serif text-xl font-bold text-[#2C221E]">Fontes e Referências Documentais</h3>
               </div>
               <p className="text-sm text-[#59473D] leading-relaxed mb-4">
-                Informações extraídas do documento oficial <strong>Diagnóstico Situacional da Cultura</strong> da Prefeitura Municipal de Pedro II / Secretaria Municipal de Cultura (SEMCULT), em conformidade com as leis provinciais nº 295/1851, nº 367/1854, nº 394/1855 e decretos municipais subsequentes.
+                Informações organizadas a partir do <strong>Diagnóstico Situacional da Cultura</strong>, elaborado pela Prefeitura Municipal de Pedro II e pela Secretaria Municipal de Cultura em outubro de 2018. O documento registra a formação histórica do município, seus marcos legislativos e a estruturação da política cultural local.
               </p>
-              <div className="text-xs text-[#6B574B] italic">
-                Projeto de Extensão Acadêmica • Secretaria Municipal de Cultura de Pedro II - PI.
+              <div className="text-xs text-[#6B574B]">
+                <strong>Referência:</strong> PREFEITURA MUNICIPAL DE PEDRO II. Secretaria Municipal de Cultura. <em>Diagnóstico Situacional da Cultura</em>. Pedro II, out. 2018.
               </div>
             </div>
           </div>
@@ -587,24 +623,159 @@ export default function App() {
               Registros fotográficos dos patrimônios arquitetônicos, naturais e culturais catalogados.
             </SectionTitle>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {patrimoniesList.map((item) => (
-                <div
-                  key={item.id}
-                  onClick={() => setLightboxImage(item)}
-                  className="group relative bg-[#F5EFEB] rounded-2xl overflow-hidden border border-[#E3D9CE] shadow-sm hover:shadow-xl transition-all cursor-pointer h-72"
+              {galleryItems.map((photo) => (
+                <button
+                  type="button"
+                  key={photo.id}
+                  onClick={() => setLightboxImage(photo)}
+                  className="group text-left bg-[#F5EFEB] rounded-2xl overflow-hidden border border-[#E3D9CE] shadow-sm hover:shadow-xl hover:border-[#8C6D4F]/50 transition-all"
                 >
-                  <img src={item.image} alt={item.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#2C221E]/90 via-[#2C221E]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6 text-[#FDFBF7]">
-                    <span className="text-xs font-semibold text-[#D4AF37] uppercase tracking-wider mb-1">{item.category}</span>
-                    <h3 className="font-serif font-bold text-lg mb-1">{item.name}</h3>
-                    <p className="text-xs text-[#EAE0D5] line-clamp-1">{item.address}</p>
-                    <div className="mt-3 flex items-center gap-1 text-xs text-[#D4AF37] font-medium">
-                      <Eye className="w-4 h-4" /> Ampliar fotografia
-                    </div>
+                  <div className="relative h-64 overflow-hidden">
+                    <img src={photo.src} alt={photo.alt} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <span className="absolute top-4 left-4 bg-[#2C221E]/80 backdrop-blur-md text-[#FDFBF7] text-xs font-medium px-3 py-1 rounded-full">
+                      {photo.category}
+                    </span>
+                    <span className="absolute bottom-4 right-4 w-9 h-9 rounded-full bg-[#FDFBF7]/90 text-[#8C6D4F] flex items-center justify-center shadow">
+                      <Eye className="w-4 h-4" />
+                    </span>
                   </div>
-                </div>
+                  <div className="p-5">
+                    <h3 className="font-serif font-bold text-lg text-[#2C221E] mb-2">{photo.patrimonyName}</h3>
+                    <p className="text-sm text-[#59473D] line-clamp-2 leading-relaxed">{photo.caption}</p>
+                    <p className="text-xs text-[#8C6D4F] mt-3">{photo.credit}</p>
+                  </div>
+                </button>
               ))}
             </div>
+          </div>
+        )}
+
+        {/* SOBRE O PROJETO */}
+        {currentView === 'about' && (
+          <div className="animate-fadeIn">
+            <section className="bg-[#2C221E] text-[#FDFBF7] py-16 sm:py-24">
+              <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <span className="text-xs uppercase tracking-widest text-[#D4AF37] font-bold block mb-3">Memória construída coletivamente</span>
+                <h1 className="font-serif text-4xl sm:text-6xl font-bold mb-6">Sobre o projeto</h1>
+                <p className="text-lg sm:text-xl text-[#EAE0D5] max-w-3xl mx-auto font-light leading-relaxed">
+                  Uma iniciativa acadêmica de extensão dedicada a reunir, organizar e tornar acessíveis registros sobre o patrimônio histórico e arquitetônico de Pedro II.
+                </p>
+              </div>
+            </section>
+
+            <section className="py-16 sm:py-20 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-start">
+                <div className="lg:col-span-3">
+                  <span className="text-xs uppercase tracking-widest text-[#8C6D4F] font-bold block mb-3">Propósito</span>
+                  <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#2C221E] mb-6">Preservar informações para aproximar pessoas e lugares</h2>
+                  <div className="space-y-5 text-[#59473D] leading-relaxed">
+                    <p>
+                      O site apresenta um inventário digital inicial de edificações ligadas à formação urbana, à vida política, à religiosidade e aos serviços públicos de Pedro II. Cada ficha reúne os dados que já puderam ser confirmados e indica, com transparência, aquilo que ainda permanece em levantamento.
+                    </p>
+                    <p>
+                      O acervo foi construído a partir de visitas, registros fotográficos, informações fornecidas durante o projeto e consulta ao <em>Diagnóstico Situacional da Cultura</em>, elaborado pela Prefeitura Municipal de Pedro II e pela Secretaria Municipal de Cultura em 2018.
+                    </p>
+                  </div>
+                </div>
+                <aside className="lg:col-span-2 bg-[#F5EFEB] p-7 rounded-3xl border border-[#E3D9CE]">
+                  <h3 className="font-serif text-xl font-bold text-[#2C221E] mb-5">Compromissos do acervo</h3>
+                  <ul className="space-y-4 text-sm text-[#59473D]">
+                    {[
+                      'Diferenciar informações confirmadas de dados ainda em levantamento.',
+                      'Identificar fontes, autoria e data das imagens sempre que possível.',
+                      'Valorizar a memória das edificações sem substituir a pesquisa histórica especializada.',
+                      'Atualizar as fichas à medida que novas evidências e registros forem reunidos.',
+                    ].map((item) => (
+                      <li key={item} className="flex gap-3">
+                        <CheckCircle className="w-5 h-5 text-[#8C6D4F] flex-shrink-0" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </aside>
+              </div>
+            </section>
+
+            <section className="pb-16 sm:pb-20 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="bg-[#F5EFEB] p-7 sm:p-9 rounded-3xl border border-[#E3D9CE]">
+                  <div className="w-12 h-12 rounded-xl bg-[#8C6D4F]/10 text-[#8C6D4F] flex items-center justify-center mb-6">
+                    <Users className="w-6 h-6" />
+                  </div>
+                  <span className="text-xs uppercase tracking-widest text-[#8C6D4F] font-bold block mb-2">Equipe acadêmica</span>
+                  <h2 className="font-serif text-2xl font-bold text-[#2C221E] mb-5">Autores do projeto</h2>
+                  <ul className="space-y-3 text-[#59473D]">
+                    {[
+                      'Gian Eduardo Lima de Oliveira',
+                      'Isabelly Rodrigues de Oliveira',
+                      'João Victor de Castro Monteiro',
+                      'Pedro Victor Holanda dos Santos Oliveira',
+                      'Wesley de Carvalho Silva',
+                    ].map((name) => (
+                      <li key={name} className="flex items-center gap-3">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#8C6D4F] flex-shrink-0" />
+                        <span>{name}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="bg-[#4A3B32] text-[#FDFBF7] p-7 sm:p-9 rounded-3xl">
+                  <div className="w-12 h-12 rounded-xl bg-[#D4AF37]/15 text-[#D4AF37] flex items-center justify-center mb-6">
+                    <Landmark className="w-6 h-6" />
+                  </div>
+                  <span className="text-xs uppercase tracking-widest text-[#D4AF37] font-bold block mb-2">Orientação acadêmica</span>
+                  <h2 className="font-serif text-2xl font-bold mb-3">Prof.ª Maysa Memória Martins</h2>
+                  <p className="text-[#EAE0D5] leading-relaxed mb-6">
+                    Projeto desenvolvido no Centro Universitário Chrisfapi - Unichrisfapi, no âmbito da formação acadêmica em Engenharia Civil.
+                  </p>
+                  <div className="pt-5 border-t border-[#FDFBF7]/15 text-sm text-[#EAE0D5]">
+                    <strong className="text-[#D4AF37]">Organização parceira:</strong><br />
+                    Secretaria Municipal de Cultura de Pedro II - SEMCULT.
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section className="bg-[#F5EFEB] py-16 sm:py-20 border-y border-[#E3D9CE]">
+              <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <SectionTitle kicker="Metodologia" title="Como o acervo foi organizado">
+                  O conteúdo combina pesquisa documental, observação das edificações e organização digital das informações.
+                </SectionTitle>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {[
+                    { icon: Route, title: 'Levantamento', text: 'Identificação dos imóveis, localização e observação de suas características arquitetônicas.' },
+                    { icon: Camera, title: 'Documentação visual', text: 'Produção e seleção de fotografias atuais, além da preservação de registros históricos recebidos.' },
+                    { icon: FileText, title: 'Conferência das fontes', text: 'Comparação entre relatos, documentos municipais e informações coletadas durante o projeto.' },
+                  ].map(({ icon: Icon, title, text }) => (
+                    <div key={title} className="bg-[#FDFBF7] p-7 rounded-2xl border border-[#E3D9CE] shadow-sm">
+                      <div className="w-11 h-11 rounded-xl bg-[#8C6D4F]/10 text-[#8C6D4F] flex items-center justify-center mb-5">
+                        <Icon className="w-5 h-5" />
+                      </div>
+                      <h3 className="font-serif text-xl font-bold text-[#2C221E] mb-3">{title}</h3>
+                      <p className="text-sm text-[#59473D] leading-relaxed">{text}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            <section className="py-16 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="bg-[#4A3B32] text-[#FDFBF7] p-8 sm:p-10 rounded-3xl">
+                <div className="flex flex-col md:flex-row gap-8 md:items-center">
+                  <BookOpen className="w-12 h-12 text-[#D4AF37] flex-shrink-0" />
+                  <div>
+                    <h2 className="font-serif text-2xl font-bold mb-3">Fonte documental principal</h2>
+                    <p className="text-[#EAE0D5] leading-relaxed mb-4">
+                      PREFEITURA MUNICIPAL DE PEDRO II. Secretaria Municipal de Cultura. <em>Diagnóstico Situacional da Cultura</em>. Pedro II, outubro de 2018.
+                    </p>
+                    <p className="text-xs text-[#D4AF37]">
+                      Fotografias autorais são identificadas como acervo dos autores do projeto. Registros cuja origem ainda não foi confirmada permanecem sinalizados no catálogo.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </section>
           </div>
         )}
 
@@ -797,6 +968,36 @@ export default function App() {
                   <strong className="font-bold text-[#2C221E]">Fontes e Referências:</strong> {selectedPatrimony.sources}
                 </div>
               )}
+
+              {selectedPatrimony.gallery?.length > 0 && (
+                <div>
+                  <div className="flex items-center justify-between gap-4 mb-4">
+                    <h3 className="font-serif text-xl font-bold text-[#2C221E]">Galeria e documentação visual</h3>
+                    <span className="text-xs text-[#8C6D4F] font-semibold">{selectedPatrimony.gallery.length} {selectedPatrimony.gallery.length === 1 ? 'registro' : 'registros'}</span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {selectedPatrimony.gallery.map((photo, index) => (
+                      <button
+                        type="button"
+                        key={`${photo.src}-${index}`}
+                        onClick={() => setLightboxImage({
+                          ...photo,
+                          patrimonyName: selectedPatrimony.name,
+                          category: selectedPatrimony.category,
+                          address: selectedPatrimony.address,
+                        })}
+                        className="text-left rounded-2xl overflow-hidden border border-[#E3D9CE] bg-[#F5EFEB] hover:border-[#8C6D4F] transition-colors"
+                      >
+                        <img src={photo.src} alt={photo.alt} className="w-full h-44 object-cover" />
+                        <div className="p-4">
+                          <p className="text-sm text-[#59473D] leading-relaxed">{photo.caption}</p>
+                          <p className="text-xs text-[#8C6D4F] mt-2">{photo.credit}</p>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="bg-[#F5EFEB] px-6 py-4 border-t border-[#E3D9CE] flex items-center justify-between flex-shrink-0">
@@ -824,10 +1025,11 @@ export default function App() {
             <button onClick={() => setLightboxImage(null)} className="absolute -top-12 right-0 text-white hover:text-[#D4AF37] transition-colors" aria-label="Fechar">
               <X className="w-8 h-8" />
             </button>
-            <img src={lightboxImage.image} alt={lightboxImage.name} className="max-h-[75vh] w-auto object-contain rounded-2xl shadow-2xl border border-white/10" />
+            <img src={lightboxImage.src} alt={lightboxImage.alt} className="max-h-[72vh] w-auto object-contain rounded-2xl shadow-2xl border border-white/10" />
             <div className="mt-4 text-center text-white">
-              <h3 className="font-serif text-xl font-bold">{lightboxImage.name}</h3>
-              <p className="text-sm text-gray-300 mt-1">{lightboxImage.address} • {lightboxImage.category}</p>
+              <h3 className="font-serif text-xl font-bold">{lightboxImage.patrimonyName}</h3>
+              <p className="text-sm text-gray-300 mt-1 max-w-3xl">{lightboxImage.caption}</p>
+              <p className="text-xs text-[#D4AF37] mt-2">{lightboxImage.credit}</p>
             </div>
           </div>
         </div>
@@ -876,7 +1078,7 @@ export default function App() {
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 border-t border-[#4A3B32] flex flex-col sm:flex-row items-center justify-between text-xs text-[#EAE0D5]">
           <p>© {new Date().getFullYear()} Pedro II: Memória, História e Patrimônio. Todos os direitos reservados.</p>
-          <p className="mt-2 sm:mt-0">Pronto para publicação na Vercel • Next.js</p>
+          <p className="mt-2 sm:mt-0">Acervo em atualização contínua • Pedro II - PI</p>
         </div>
       </footer>
     </div>

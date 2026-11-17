@@ -1,218 +1,291 @@
-// DATASET OFICIAL EXTRAÍDO DO DIAGNÓSTICO SITUACIONAL DA CULTURA - SEMCULT DE PEDRO II - PI
-const img = (id) =>
-  `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1200&q=80`;
+const placeholderImage = '/image/placeholder-patrimonio.svg';
 
 const base = [
   {
     id: 1,
-    name: 'Igreja Matriz de Nossa Sra. da Conceição',
+    name: 'Igreja Matriz de Nossa Senhora da Conceição',
     category: 'Igrejas e edificações religiosas',
     shortDesc:
-      'Localizada na Rua Tertuliano Brandão Filho, nº 467, Centro, Pedro II–PI. Fundada em 1822.',
+      'Templo ligado à formação de Pedro II, cuja edificação atual teve origem entre 1839 e 1840.',
     description:
-      'A Igreja Matriz de Nossa Senhora da Conceição remonta à fundação do povoado Pequizeiro em 1822 por João Alves Pereira, Abel Pereira, Domingos Pereira Dutra, Albino Pereira dos Santos e Antônio da Silva, que edificaram a capela e doaram 1,5 km de terra para o patrimônio da santa. A imagem da padroeira veio diretamente de Portugal.',
+      'A primeira capela dedicada a Nossa Senhora da Conceição foi erguida em 1822 pelos fundadores do povoado Pequizeiro. Segundo o Diagnóstico Situacional da Cultura, a edificação da Igreja Matriz atual ocorreu entre 1839 e 1840 e passou por diversas modificações ao longo do tempo.',
     history:
-      'Iniciada em 1822 como capela do povoado Pequizeiro, passou por sucessivas reformas ao longo do Império e da República, consolidando-se como o principal templo religioso e marco aglutinador da identidade perdoense.',
+      'A primeira capela era de taipa e coberta de palha. A construção seguinte possuía apenas uma torre, e sua estrutura foi aproveitada em reformas posteriores. Em 1924, parte do prédio desabou durante o rigoroso período de chuvas. O padre Benedito Olímpio de Castro promoveu campanhas com fiéis e autoridades para a reconstrução. Em 1948, o padre Áureo José de Oliveira iniciou a torre central, planejada para o centenário da paróquia, em 1951. A reforma foi continuada pelo padre Mário José de Menezes.',
     culturalImportance:
-      'Palco central dos Festejos de Nossa Senhora da Conceição (28 de novembro a 08 de dezembro) e do tradicional Dia do Vaqueiro em 07 de dezembro.',
+      'A igreja é uma referência religiosa, histórica e urbana de Pedro II. Nela são realizados os tradicionais Festejos de Nossa Senhora da Conceição, celebrados de 28 de novembro a 8 de dezembro.',
     architecture:
-      'Alvenaria tradicional com elementos neoclássicos e coloniais, torre sineira frontal e piso histórico.',
-    address:
-      'Rua Tertuliano Brandão Filho, nº 467, Centro, Pedro II - PI (CEP 64255-000)',
+      'Edificação religiosa formada por sucessivas reconstruções, reformas e ampliações realizadas desde o século XIX.',
+    address: 'Rua Tertuliano Brandão Filho, nº 467, Centro, Pedro II - PI',
     coordinates: [-4.4251206, -41.4583137],
-    yearBuilt: '1822',
-    conservation: 'Bom estado de conservação, sob tutela paroquial.',
+    yearBuilt: 'Capela: 1822; igreja atual: 1839–1840',
+    conservation: 'Em uso religioso; avaliação técnica de conservação ainda não realizada.',
     curiosities:
-      'João Alves Pereira doou um quilômetro e meio de terra para a constituição do patrimônio da Santa.',
+      'A torre central ficou conhecida como Torre do Centenário, por ter sido planejada para a comemoração dos cem anos da paróquia.',
     sources:
-      'Diagnóstico Situacional da Cultura - SEMCULT de Pedro II - PI. [Google Maps](https://www.google.com/maps/place/Par%C3%B3quia+Nossa+Senhora+da+Concei%C3%A7%C3%A3o/@-4.4251206,-41.4583137,17z)',
-    keywords: ['Igreja', 'Matriz', 'Religião', 'Século XIX', 'Tertuliano Brandão'],
-    image: '/image/IMG_5440.webp',
+      'PREFEITURA MUNICIPAL DE PEDRO II. Secretaria Municipal de Cultura. Diagnóstico Situacional da Cultura. Pedro II, out. 2018, p. 6, 14 e 16–17; informações complementares fornecidas pela Secretaria Municipal de Cultura durante o projeto.',
+    keywords: ['Igreja Matriz', 'Nossa Senhora da Conceição', 'Religião', 'Torre do Centenário'],
+    image: placeholderImage,
+    imageCaption: 'Imagem externa ainda não disponível no acervo do projeto.',
+    imageCredit: 'Acervo em atualização.',
+    gallery: [
+      {
+        src: '/image/igreja-matriz-interior.webp',
+        alt: 'Interior da Igreja Matriz de Nossa Senhora da Conceição',
+        caption:
+          'Interior da Igreja Matriz de Nossa Senhora da Conceição, com vista para o altar, a pintura mural, o piso e os bancos.',
+        credit: 'Fotografia: acervo dos autores do projeto, 2026.',
+      },
+    ],
   },
   {
     id: 2,
-    name: 'Residência do Alferes Domingos da Silva Mourão',
-    category: 'Construções antigas',
+    name: 'Casarão do Capitão Sotero Nogueira Lima',
+    category: 'Construções históricas',
+    aliases: ['Clube 11 de Agosto', 'Museu da Opala'],
     shortDesc:
-      'Imponente residência histórica localizada na Rua Domingos Mourão, em frente à Praça da Matriz.',
+      'Casarão histórico também conhecido como Clube 11 de Agosto e associado ao Museu da Opala.',
     description:
-      'Antiga residência do Alferes Domingos da Silva Mourão, figura central na história política e social dos primórdios de Pedro II. O casarão reflete a tipologia arquitetônica do período colonial e imperial da região.',
+      'O Casarão do Capitão Sotero Nogueira Lima corresponde à edificação conhecida como Clube 11 de Agosto. O Diagnóstico Situacional da Cultura de 2018 registra o antigo clube como espaço associado ao Museu da Opala.',
     history:
-      'Testemunha da formação urbana em torno da Praça da Matriz e do antigo povoado de Pequizeiro.',
+      'A relação do imóvel com o Capitão Sotero Nogueira Lima integra a memória residencial da cidade. Em período posterior, a edificação passou a ser reconhecida como Clube 11 de Agosto, assumindo funções culturais que ainda estão sendo detalhadas pelo levantamento.',
     culturalImportance:
-      'Preserva a memória das famílias pioneiras e da arquitetura civil histórica do município.',
+      'O imóvel reúne referências da memória residencial e da vida cultural de Pedro II, além de compor o conjunto arquitetônico de interesse histórico do município.',
     architecture:
-      'Casarão tradicional com paredes de adobe/alvenaria espessa, janelas com vergas em arco e pé-direito elevado.',
-    address:
-      'Rua Domingos Mourão (antiga Rua Domingos da Silva Mourão), em frente à Praça da Matriz, Pedro II - PI',
-    coordinates: [-4.4259, -41.458],
-    yearBuilt: 'Século XIX',
-    conservation: 'Preservado com adaptações funcionais.',
+      'Edificação térrea de esquina, com cobertura em telhas cerâmicas, frontão triangular, aberturas altas e ornamentação destacada em branco sobre a fachada azul.',
+    address: 'Pedro II - PI — localização confirmada no Google Maps.',
+    coordinates: [-4.426477, -41.459307],
+    yearBuilt: 'Informação em levantamento',
+    conservation: 'Edificação preservada e documentada fotograficamente durante o levantamento do projeto.',
     curiosities:
-      'Localizado estrategicamente frente ao principal núcleo religioso e civil da vila.',
-    sources: 'Secretaria Municipal de Cultura (SEMCULT) de Pedro II.',
-    keywords: ['Alferes', 'Domingos da Silva Mourão', 'Casarão', 'Arquitetura Colonial'],
-    image: '/image/IMG_5442.webp',
+      'O mesmo imóvel aparece nas fontes e na memória local sob denominações diferentes: Casarão do Capitão Sotero Nogueira Lima, Clube 11 de Agosto e Museu da Opala.',
+    sources:
+      'PREFEITURA MUNICIPAL DE PEDRO II. Secretaria Municipal de Cultura. Diagnóstico Situacional da Cultura. Pedro II, out. 2018, p. 15 e 17; levantamento de campo e identificação fornecida durante o projeto.',
+    keywords: ['Capitão Sotero Nogueira Lima', 'Clube 11 de Agosto', 'Museu da Opala', 'Casarão', 'Pedro II'],
+    image: '/image/IMG_5429.webp',
+    imageCaption: 'Vista geral da fachada do Casarão do Capitão Sotero Nogueira Lima, conhecido como Clube 11 de Agosto.',
+    imageCredit: 'Fotografia: acervo dos autores do projeto, 2026.',
+    gallery: [
+      {
+        src: '/image/IMG_5429.webp',
+        alt: 'Vista geral do Clube 11 de Agosto em uma esquina de Pedro II',
+        caption: 'Vista geral da fachada e da implantação de esquina do Clube 11 de Agosto.',
+        credit: 'Fotografia: acervo dos autores do projeto, 2026.',
+      },
+      {
+        src: '/image/IMG_5421.webp',
+        alt: 'Fachada azul e cobertura cerâmica do Clube 11 de Agosto',
+        caption: 'Fachada principal, cobertura cerâmica e área lateral ajardinada.',
+        credit: 'Fotografia: acervo dos autores do projeto, 2026.',
+      },
+      {
+        src: '/image/IMG_5427.webp',
+        alt: 'Vista lateral da fachada do Clube 11 de Agosto',
+        caption: 'Vista lateral da edificação, com destaque para o frontão e a cobertura.',
+        credit: 'Fotografia: acervo dos autores do projeto, 2026.',
+      },
+      {
+        src: '/image/IMG_5428.webp',
+        alt: 'Detalhe do frontão e das janelas do Clube 11 de Agosto',
+        caption: 'Detalhe do frontão, do letreiro, das janelas e dos ornamentos da fachada.',
+        credit: 'Fotografia: acervo dos autores do projeto, 2026.',
+      },
+    ],
   },
   {
     id: 3,
-    name: 'Casarão do Cel. Domingos Mourão Filho (Solar da Estrela Marrom)',
-    category: 'Patrimônios históricos',
+    name: 'Casarão do Coronel Domingos Mourão Filho',
+    category: 'Construções históricas',
     shortDesc:
-      'Localizado na Praça Domingos Mourão Filho, Centro, Pedro II–PI. Coordenadas: -4.4262103, -41.4584380.',
+      'Residência histórica associada à trajetória política do coronel Domingos Mourão Filho.',
     description:
-      'O Solar da Estrela Marrom, antigo casarão do Coronel Domingos Mourão Filho, destaca-se na paisagem urbana da praça principal, representando o apogeu econômico e político do ciclo histórico municipal.',
+      'O casarão pertenceu ao coronel Domingos Mourão Filho, que exerceu as funções de intendente, prefeito municipal de Pedro II e coletor federal. A residência foi cenário de acontecimentos relevantes da história política do município.',
     history:
-      'Construção centenária associada a lideranças políticas e tradicionais da história de Pedro II.',
+      'Em 1930, o casarão foi atacado por forças policiais e grupos políticos contrários ao coronel Domingos Mourão Filho, que o depuseram do cargo de prefeito de Pedro II.',
     culturalImportance:
-      'Referência visual e histórica do Centro Histórico, abrigando memórias das elites agrárias e comerciais do século XIX e XX.',
+      'O imóvel preserva a memória política e familiar relacionada a um período importante da história municipal.',
     architecture:
-      'Arquitetura eclética com traços coloniais, amplos salões internos e fachada imponente voltada para a praça.',
-    address: 'Praça Domingos Mourão Filho, Centro, Pedro II–PI (CEP 64255-000)',
+      'Casarão de implantação tradicional, com fachadas alinhadas às ruas e cobertura em telhas cerâmicas.',
+    address: 'Praça Domingos Mourão Filho, Centro, Pedro II - PI',
     coordinates: [-4.4262103, -41.458438],
-    yearBuilt: 'Século XIX / XX',
-    conservation: 'Bom estado de preservação arquitetônica.',
-    curiosities: 'Situado no coração da praça que homenageia a mesma família ilustre.',
-    sources:
-      'Diagnóstico Situacional da Cultura (SEMCULT). [Google Maps](https://www.google.com/maps/place/Solar+da+Estrela+Marrom/@-4.4262103,-41.458438,17z)',
-    keywords: ['Casarão', 'Coronel Domingos Mourão Filho', 'Solar', 'Estrela Marrom'],
-    image: '/image/IMG_5443.webp',
+    yearBuilt: 'Informação em levantamento',
+    conservation:
+      'Permanece pertencendo à família e conserva móveis e equipamentos da época do coronel.',
+    curiosities:
+      'O interior do casarão mantém mobiliário e equipamentos associados à época de Domingos Mourão Filho.',
+    sources: 'Informações fornecidas durante o levantamento do projeto.',
+    keywords: ['Domingos Mourão Filho', 'Casarão', 'Política', 'Patrimônio familiar'],
+    image: '/image/casarao-domingos-mourao-filho.webp',
+    imageCaption:
+      'Registro do conjunto edificado na Praça Domingos Mourão Filho. O enquadramento exato do casarão será confirmado no levantamento.',
+    imageCredit: 'Imagem fornecida ao projeto; autoria e data a confirmar.',
+    gallery: [
+      {
+        src: '/image/casarao-domingos-mourao-filho.webp',
+        alt: 'Conjunto de edificações históricas na Praça Domingos Mourão Filho',
+        caption:
+          'Registro do conjunto edificado na Praça Domingos Mourão Filho. A identificação do imóvel no enquadramento permanece em conferência.',
+        credit: 'Imagem fornecida ao projeto; autoria e data a confirmar.',
+      },
+    ],
   },
   {
     id: 4,
-    name: 'Sede da Associação Rural, atual Secretaria de Agricultura',
-    category: 'Espaços culturais',
+    name: 'Casarão do Prefeito e Deputado Estadual Manoel Nogueira Lima',
+    category: 'Construções históricas',
     shortDesc:
-      'Rua Vereador Agostinho Pinheiro dos Santos, nº 345, Centro, ao lado da Praça da Matriz, Pedro II–PI.',
+      'Casarão situado fora do quadrilátero do centro histórico e ligado à trajetória política da família Nogueira Lima.',
     description:
-      'Antiga sede da Associação Rural de Pedro II, hoje abrigando a Secretaria Municipal de Agricultura, Abastecimento e Irrigação. Edificação de relevância administrativa e comunitária junto ao centro histórico.',
+      'O casarão do prefeito e deputado estadual Manoel Nogueira Lima foi palco de importantes momentos políticos do município. Diversos integrantes da família também seguiram trajetória na vida pública.',
     history:
-      'Construída para dar suporte às atividades produtivas rurais, associativismo e fomento agropecuário do município.',
+      'Entre os familiares mencionados estão Manoel Nogueira Filho, deputado estadual pelo Piauí e prefeito de Pedro II; Ciro Nogueira Lima, deputado federal por dois mandatos; Aquiles Nogueira, deputado estadual pelo Piauí; Etevaldo Nogueira Lima, deputado estadual pelo Ceará e deputado federal; e Ciro Nogueira Filho, deputado federal e senador pelo Piauí.',
     culturalImportance:
-      'Ponto de referência para produtores rurais, feirantes e ações de desenvolvimento sustentável.',
+      'O imóvel representa parte da memória política de Pedro II e da atuação pública da família Nogueira Lima.',
     architecture:
-      'Edificação institucional tradicional com salas de atendimento e pátio integrado.',
-    address:
-      'Rua Vereador Agostinho Pinheiro dos Santos, nº 345, Centro, Pedro II–PI (CEP 64255-000)',
-    coordinates: [-4.4253525, -41.4566598],
-    yearBuilt: 'Meados do século XX',
-    conservation: 'Ativo e em pleno funcionamento institucional.',
-    curiosities: 'Localizado estrategicamente ao lado da Praça da Matriz.',
-    sources:
-      'Prefeitura Municipal de Pedro II e SEMCULT. [Google Maps](https://www.google.com/maps/place/Secretaria+de+Agricultura+Abastecimento+e+Irriga%C3%A7%C3%A3o/@-4.4253525,-41.4566598,17z)',
-    keywords: ['Associação Rural', 'Secretaria de Agricultura', 'Agostinho Pinheiro'],
-    image: '/image/IMG_5439.webp',
+      'Casarão de esquina, com fachada ornamentada, platibanda e aberturas altas distribuídas regularmente.',
+    address: 'Pedro II - PI — localização confirmada no Google Maps.',
+    coordinates: [-4.426956, -41.457299],
+    yearBuilt: 'Informação em levantamento',
+    conservation: 'Estado de conservação a complementar após o levantamento de campo.',
+    curiosities: 'Está localizado fora do quadrilátero reconhecido como centro histórico.',
+    sources: 'Informações fornecidas durante o levantamento do projeto.',
+    keywords: ['Manoel Nogueira Lima', 'Casarão', 'Política', 'Família Nogueira Lima'],
+    image: '/image/casarao-manoel-nogueira-lima.webp',
+    imageCaption: 'Vista das fachadas do casarão de esquina ligado à família Nogueira Lima.',
+    imageCredit: 'Fotografia: acervo dos autores do projeto.',
+    gallery: [
+      {
+        src: '/image/casarao-manoel-nogueira-lima.webp',
+        alt: 'Casarão de esquina do prefeito e deputado estadual Manoel Nogueira Lima',
+        caption:
+          'Casarão ligado ao prefeito e deputado estadual Manoel Nogueira Lima, com destaque para as duas fachadas ornamentadas.',
+        credit: 'Fotografia: acervo dos autores do projeto.',
+      },
+    ],
   },
   {
     id: 5,
-    name: 'Pinacoteca Marechal das Artes',
-    category: 'Espaços culturais',
+    name: 'Sede da Associação Rural de Pedro II',
+    category: 'Edificações institucionais',
     shortDesc:
-      'Espaço cultural de fomento às artes plásticas, exposições e preservação da memória artística local.',
+      'Fundada em 1937 como associação patronal, a edificação abriga atualmente a Secretaria Municipal de Agricultura.',
     description:
-      'A Pinacoteca Marechal das Artes abriga acervos pictóricos e escultóricos que valorizam a produção artística de Pedro II e do Piauí.',
+      'A Associação Rural de Pedro II foi fundada em 1937 pelo professor Epifânio Getirana, seu primeiro presidente e responsável pela construção do prédio.',
     history:
-      'Criada para abrigar obras doadas por artistas locais e consagrados no cenário nacional.',
-    culturalImportance: 'Ponto de encontro para acadêmicos, estudantes e turistas.',
-    architecture: 'Edificação adaptada com salas expositivas climatizadas.',
-    address: 'Centro Histórico, Pedro II - PI',
-    coordinates: [-4.425, -41.4515],
-    yearBuilt: '2008',
-    conservation: 'Excelente estado de preservação.',
-    curiosities: 'Mantém exposições permanentes sobre o garimpo da opala.',
-    sources: 'Secretaria Municipal de Cultura (SEMCULT).',
-    keywords: ['Pinacoteca', 'Arte', 'Pintura', 'Cultura'],
-    image: '/image/IMG_5435.webp',
+      'No imóvel funcionaram a primeira escola de Pedro II, denominada Educandário Tertuliano Brandão Filho, além do FUNRURAL e do MOBRAL. Atualmente, o prédio é sede da Secretaria Municipal de Agricultura.',
+    culturalImportance:
+      'A edificação reúne memórias ligadas à educação, à assistência rural e à administração pública municipal.',
+    architecture:
+      'Edificação térrea com fachada simétrica, platibanda ornamentada e sequência regular de janelas.',
+    address: 'Rua Vereador Agostinho Pinheiro dos Santos, nº 345, Centro, Pedro II - PI',
+    coordinates: [-4.4253525, -41.4566598],
+    yearBuilt: '1937',
+    conservation: 'Edificação em uso pela administração municipal.',
+    curiosities:
+      'O fundador e primeiro presidente da Associação Rural, professor Epifânio Getirana, também foi o construtor do prédio.',
+    sources: 'Informações fornecidas durante o levantamento do projeto.',
+    keywords: ['Associação Rural', 'Epifânio Getirana', 'FUNRURAL', 'MOBRAL', 'Agricultura'],
+    image: '/image/associacao-rural-pedro-ii.webp',
+    imageCaption: 'Fachada da Sede da Associação Rural de Pedro II.',
+    imageCredit: 'Fotografia: acervo dos autores do projeto.',
+    gallery: [
+      {
+        src: '/image/associacao-rural-pedro-ii.webp',
+        alt: 'Fachada azul da Sede da Associação Rural de Pedro II',
+        caption: 'Fachada da Sede da Associação Rural de Pedro II, fundada em 1937.',
+        credit: 'Fotografia: acervo dos autores do projeto.',
+      },
+    ],
   },
   {
     id: 6,
-    name: 'Clube 11 de Agosto',
-    category: 'Patrimônios históricos',
+    name: 'Casarão do Coronel Tertuliano Brandão Filho',
+    category: 'Construções históricas',
     shortDesc:
-      'Tradicional clube social da cidade, palco de bailes, tertúlias e eventos cívicos históricos.',
+      'Antiga residência da família Brandão, posteriormente utilizada como pensão, hotel e espaço comercial.',
     description:
-      'Batizado em alusão à data magna de emancipação política do município (11 de agosto de 1854), o Clube 11 de Agosto é o clube social mais emblemático de Pedro II.',
-    history: 'Fundado em meados do século XX como ponto central da vida recreativa.',
-    culturalImportance: 'Preserva a memória imaterial dos bailes de gala e festividades.',
-    architecture: 'Arquitetura retro com amplo salão de festas.',
-    address: 'Rua Principal, Centro, Pedro II - PI',
-    coordinates: [-4.424, -41.4525],
-    yearBuilt: '1962',
-    conservation: 'Bom estado, mantendo uso comunitário.',
-    curiosities: 'Recebeu autoridades estaduais nos Festivais de Inverno.',
-    sources: 'Diagnóstico Situacional da Cultura (SEMCULT).',
-    keywords: ['Clube', '11 de Agosto', 'Social', 'Baile'],
-    image: '/image/IMG_5429.webp',
+      'O coronel Tertuliano Brandão Filho e sua família residiram no casarão até 1925, quando se mudaram para o novo palacete da Praça da Independência, atual Memorial Tertuliano Brandão Filho.',
+    history:
+      'Entre as décadas de 1940 e 1980, funcionaram no imóvel inicialmente a Pensão Araújo e, posteriormente, o Hotel Brasília.',
+    culturalImportance:
+      'O casarão registra diferentes usos residenciais, de hospedagem e comerciais ao longo da história urbana de Pedro II.',
+    architecture:
+      'Casarão de esquina com cobertura em telhas cerâmicas e aberturas altas em arco.',
+    address: 'Pedro II - PI — endereço em confirmação.',
+    coordinates: null,
+    yearBuilt: 'Anterior a 1925',
+    conservation: 'O imóvel é atualmente ocupado por lojas de joias em opala.',
+    curiosities:
+      'O edifício passou de residência familiar a pensão, hotel e conjunto de estabelecimentos comerciais.',
+    sources: 'Informações fornecidas durante o levantamento do projeto.',
+    keywords: ['Tertuliano Brandão Filho', 'Pensão Araújo', 'Hotel Brasília', 'Opala'],
+    image: '/image/casarao-tertuliano-brandao-filho.webp',
+    imageCaption: 'Registro histórico do Casarão do Coronel Tertuliano Brandão Filho.',
+    imageCredit: 'Fonte, autoria e data do registro em processo de identificação.',
+    gallery: [
+      {
+        src: '/image/casarao-tertuliano-brandao-filho.webp',
+        alt: 'Registro histórico do Casarão do Coronel Tertuliano Brandão Filho',
+        caption: 'Registro histórico do Casarão do Coronel Tertuliano Brandão Filho.',
+        credit: 'Fonte, autoria e data do registro em processo de identificação.',
+      },
+    ],
   },
   {
     id: 7,
-    name: 'Mercado do Artesão',
-    category: 'Espaços culturais',
+    name: 'Residência do Alferes Domingos da Silva Mourão',
+    category: 'Construções históricas',
     shortDesc:
-      'Centro de comercialização da Renda de Bilro, joias em opala e rica gastronomia local.',
+      'Casarão que foi residência do alferes Domingos da Silva Mourão e abrigou diferentes serviços públicos.',
     description:
-      'O Mercado do Artesão é o epicentro do turismo cultural e de compras em Pedro II, com Renda de Bilro e pratos como leitoa assada e carne de bode.',
-    history: 'Estabelecido para concentrar e valorizar os saberes tradicionais.',
-    culturalImportance: 'Fundamental para a economia criativa e artesanato utilitário.',
-    architecture: 'Arquitetura integrada com boxes comerciais.',
-    address: 'Próximo à Praça da Matriz, Centro, Pedro II - PI',
-    coordinates: [-4.4258, -41.454],
-    yearBuilt: '2001',
-    conservation: 'Excelente estado e funcionamento diário.',
-    curiosities: 'A Renda de Bilro é Patrimônio Cultural Imaterial do Piauí.',
-    sources: 'SEMCULT e Associação de Artesãos.',
-    keywords: ['Mercado', 'Artesanato', 'Renda de Bilro', 'Opala'],
-    image: '/image/IMG_5428.webp',
-  },
-  {
-    id: 8,
-    name: 'Cachoeira do Salto Liso',
-    category: 'Pontos turísticos naturais',
-    shortDesc:
-      "Queda d'água cristalina cercada por paredões de rocha e vegetação exuberante.",
-    description:
-      'Com queda de 25 metros, a Cachoeira do Salto Liso é um dos refúgios naturais mais belos de Pedro II.',
-    history: 'Conhecida tradicionalmente por moradores e tropeiros.',
-    culturalImportance: 'Símbolo da riqueza paisagística da Serra dos Matões.',
-    architecture: 'Formação natural em arenito.',
-    address: 'Zona Rural, Pedro II - PI',
-    coordinates: [-4.38, -41.42],
-    yearBuilt: 'Formação natural',
-    conservation: 'Preservada com restrições ambientais.',
-    curiosities: 'Rocha perfeitamente polida pela força das águas.',
-    sources: 'Secretaria de Turismo.',
-    keywords: ['Cachoeira', 'Salto Liso', 'Natureza'],
-    image: '/image/IMG_5427.webp',
-  },
-  {
-    id: 9,
-    name: 'Mirante O Gritador',
-    category: 'Pontos turísticos naturais',
-    shortDesc:
-      'Mirante espetacular a mais de 700 metros de altitude com vista panorâmica.',
-    description:
-      'Principal mirante natural de Pedro II na Serra dos Matões, com vista fantástica para o horizonte piauiense.',
-    history: 'Local histórico de parada para tropeiros.',
-    culturalImportance: 'Cartão-postal máximo do ecoturismo municipal.',
-    architecture: 'Mirante com decks de madeira.',
-    address: 'Serra dos Matões, Pedro II - PI',
-    coordinates: [-4.3512, -41.4019],
-    yearBuilt: 'Formação natural',
-    conservation: 'Preservado com infraestrutura.',
-    curiosities: 'O eco nos paredões deu origem à lenda do Gritador.',
-    sources: 'SEMCULT.',
-    keywords: ['Mirante', 'Gritador', 'Serra'],
-    image: '/image/IMG_5421.webp',
+      'O imóvel foi residência do alferes Domingos da Silva Mourão, ex-intendente municipal de Pedro II. Nele nasceu seu filho primogênito, Domingos Mourão Filho, que também foi intendente e prefeito do município.',
+    history:
+      'Na década de 1930, o prédio sediou o primeiro posto de saúde de Pedro II e a Agência dos Correios e Telégrafos. Na década de 1940, foi comprado pelo político Milton Brandão, que posteriormente o vendeu ao primo Osvaldo Brandão.',
+    culturalImportance:
+      'As diferentes funções residenciais e públicas exercidas pelo imóvel o tornam um registro da história política, administrativa e dos serviços públicos de Pedro II.',
+    architecture:
+      'Edificação térrea de esquina, com cobertura em telhas cerâmicas e aberturas com vergas em arco.',
+    address: 'Pedro II - PI — endereço em confirmação.',
+    coordinates: null,
+    yearBuilt: 'Informação em levantamento',
+    conservation:
+      'Pertence aos herdeiros de Osvaldo Brandão e Anatercia Monteiro Brandão e atualmente abriga órgãos públicos municipais.',
+    curiosities:
+      'O imóvel já funcionou como residência, posto de saúde, agência dos Correios e sede de órgãos municipais.',
+    sources: 'Informações fornecidas durante o levantamento do projeto.',
+    keywords: ['Domingos da Silva Mourão', 'Posto de Saúde', 'Correios e Telégrafos', 'Órgãos públicos'],
+    image: '/image/residencia-alferes-domingos-silva-mourao.webp',
+    imageCaption: 'Registro histórico da antiga residência do Alferes Domingos da Silva Mourão.',
+    imageCredit: 'Fonte, autoria e data do registro em processo de identificação.',
+    gallery: [
+      {
+        src: '/image/residencia-alferes-domingos-silva-mourao.webp',
+        alt: 'Registro histórico da residência do Alferes Domingos da Silva Mourão',
+        caption:
+          'Antiga residência do Alferes Domingos da Silva Mourão, posteriormente utilizada por diferentes serviços públicos municipais.',
+        credit: 'Fonte, autoria e data do registro em processo de identificação.',
+      },
+    ],
   },
 ];
 
-export const patrimoniosSeed = base.map((p) => ({ ...p, gallery: [p.image] }));
+export const patrimoniosSeed = base.map((patrimonio) => ({
+  ...patrimonio,
+  gallery:
+    patrimonio.gallery ||
+    (patrimonio.image === placeholderImage
+      ? []
+      : [
+          {
+            src: patrimonio.image,
+            alt: patrimonio.name,
+            caption: patrimonio.imageCaption || patrimonio.name,
+            credit: patrimonio.imageCredit || 'Crédito em identificação.',
+          },
+        ]),
+}));
 
 export const categorias = [
-  'Patrimônios históricos',
-  'Construções antigas',
+  'Construções históricas',
   'Igrejas e edificações religiosas',
-  'Pontos turísticos naturais',
-  'Espaços culturais',
-  'Monumentos',
+  'Edificações institucionais',
 ];
